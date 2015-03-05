@@ -27,10 +27,10 @@ if [ "$5" != "time" ]; then
 	PORTS=$(echo -e "login $3 $4\nport list\nquit"|nc -w 1 $1 $2|grep '[01][01][01][01]' | cut -d " " -f 2|tr -cd '\11\12\40-\176')
 
 	if [ "$PORTS" == "$5" ]; then
-		echo "Port states matches"
+		echo "OK: Port states matching"
 		exit 0
 	else
-		echo "Port states DONT MATCH"
+		echo "CRITICAL: Port states DON'T MATCH!"
 		exit 2
 	fi
 else
