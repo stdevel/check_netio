@@ -7,6 +7,7 @@ This plugin is quite old (*~2012*), I'm planning to update it for [some reasons]
 Requirements
 ============
 You need to have the ``netcat`` / ``nc`` binary installed.
+I successfully tested the plugin with **NETIO-230A** and **NETIO-230B** devices. Most recent firmware version might not work (*if so, let me know!*)
 
 Usage
 =====
