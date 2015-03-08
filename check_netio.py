@@ -111,10 +111,10 @@ if __name__ == "__main__":
 	checkGroup.add_option("-x", "--port-state", dest="portStates", metavar="STATE", help="defines expected port states [0=off, 1=on, ?=whatever]")
 	
 	#-y / --use-hash
-	hashGroup.add_option("-y", "--use-hash", dest="useHash", action="store_true", default=False, help="uses password hash instead of plain password (default: no")
+	hashGroup.add_option("-y", "--use-hash", dest="useHash", action="store_true", default=False, help="uses password hash instead of plain password (default: no)")
 	
 	#-g / --generate-hash
-	hashGroup.add_option("-g", "--generate-hash", dest="generateHash", action="store_true", default=False, help="generates a password hash and quits (default: no")
+	hashGroup.add_option("-g", "--generate-hash", dest="generateHash", action="store_true", default=False, help="generates a password hash and quits (default: no)")
 	
 	#add groups
 	parser.add_option_group(connGroup)
