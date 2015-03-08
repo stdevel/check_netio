@@ -7,7 +7,7 @@ This plugin is quite old (*~2012*), I'm planning to update it for [some reasons]
 Requirements
 ============
 You need to have the ``netcat`` / ``nc`` binary installed.
-I successfully tested the plugin with **NETIO-230A** and **NETIO-230B** devices. Most recent firmware version might not work (*if so, let me know!*)
+I successfully tested the plugin with **NETIO-230A** and **NETIO-230B** devices. Most recent firmware version on newer product releases might not work (*see table below*).
 
 Usage
 =====
@@ -38,3 +38,23 @@ Check whether power port states are matching with expectation (*Port 1 turned on
 $ ./check_netio.sh 10.22.1.8 1337 admin password 1000
 OK: Port states matching
 ```
+
+Firmware support
+================
+See the table below for tested firmware versions:
+
+| Device | Firmware | Status |
+|:-------|:---------|:-------|
+| **230A** | [2.31](http://www.koukaam.se/kkmd/downloads.php?cat_id=18&download_id=1229) | working |
+| **230A** | [2.32](http://www.koukaam.se/kkmd/downloads.php?cat_id=18&download_id=1314) | working |
+| **230A** | [2.33](http://www.koukaam.se/kkmd/downloads.php?cat_id=18&download_id=1332) | working |
+| **230A** | [2.34RC1](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1610) | working |
+| **230B** | [3.12](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1693) | working |
+| **230B** | [4.03](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1985) | *not tested* |
+| **230B** | [4.05](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=2109) | *not tested* |
+| **230C** | [4.03](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1986) | *not tested* |
+| **230C** | [4.05](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=2110) | *not tested* |
+| **230CS** | [4.03](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1987) | *not tested* |
+| **230CS** | [4.05](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=2111) | *not tested* |
+
+Please let me know if you have tested the plugin on previously untested devices to complete the list!
