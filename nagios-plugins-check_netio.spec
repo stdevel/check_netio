@@ -23,7 +23,7 @@ Check out the GitHub page for further information: https://github.com/stdevel/ch
 %build
 #change /usr/lib64 to /usr/lib if we're on i686
 %ifarch i686
-sed -i -e "s/usr\/lib64/usr\/lib/" nagios-plugins-check_netio.cfg
+sed -i -e "s/usr\/lib64/usr\/lib/" check_netio.cfg
 %endif
 
 %install
