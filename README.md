@@ -85,7 +85,7 @@ Password:
 
 If you want to make the script work unattended you might choose between one of the following options:
 
-#Option 1: shell variables
+##Option 1: shell variables
 Set those shell variables:
 * **NETIO_LOGIN** - a username
 * **NETIO_PASSWORD** - the appropriate password
@@ -95,7 +95,7 @@ You might also want to set the HISTFILE variable (*depending on your shell*) to 
 $ HISTFILE="" NETIO_LOGIN=admin NETIO_PASSWORD=pass ./check_netio.py -s mynetio -n
 ```
 
-#Option 2: auth file
+##Option 2: auth file
 A better possibility is to create a authfile with permisions **0600**. Just enter the username in the first line and the password in the second line:
 ```
 $ cat authfile
