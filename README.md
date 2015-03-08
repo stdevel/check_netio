@@ -1,5 +1,8 @@
 check_netio
 ==========
+
+![Example Icinga screenshot](https://raw.githubusercontent.com/stdevel/check_netio/master/Icinga_Screenshot.png "Example Icinga screenshot")
+
 ``check_netio`` is a Nagios / Icinga plugin for checking power states of [Koukaan NETIO devices](http://www.koukaam.se/kkmd/products.php?cat_id=19).
 
 Requirements
