@@ -49,7 +49,7 @@ See the table below for tested firmware versions:
 | **230A** | [2.32](http://www.koukaam.se/kkmd/downloads.php?cat_id=18&download_id=1314) | working |
 | **230A** | [2.33](http://www.koukaam.se/kkmd/downloads.php?cat_id=18&download_id=1332) | working |
 | **230A** | [2.34RC1](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1610) | working |
-| **230B** | [3.12](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1693) | working |
+| **230B** | [3.12](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1693) | **not working** |
 | **230B** | [4.03](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1985) | *not tested* |
 | **230B** | [4.05](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=2109) | *not tested* |
 | **230C** | [4.03](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1986) | *not tested* |
