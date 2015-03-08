@@ -21,8 +21,8 @@ You need to specify the following parameters:
 | `-k` / `--kshell-port` | defines the KShell port (*default: 1234*) |
 | `-u` / `--username` | defines the username |
 | `-w` / `--password` | defines the password |
-| `-y` / `--use-hash` | uses password hash instead of plain password (*default: no*) |
-| `-g` / `--generate-hash` | generates a password hash and quits (*default: no*) |
+| `-y` / `--use-hash` | uses password hash instead of plain password (*default: no*) - currently **not supported** yet, see [issue](https://github.com/stdevel/check_netio/issues/2) |
+| `-g` / `--generate-hash` | generates a password hash and quits (*default: no*) - currently **not supported** yet, see [issue](https://github.com/stdevel/check_netio/issues/2) |
 | `-n` / `--check-ntp` | checks NTP synchronization state - requires KShell (*default: no*) |
 | `-x` / `--port-state` | defines expected port states [*0=off, 1=on, ?=whatever*] |
 
