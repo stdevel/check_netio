@@ -96,13 +96,19 @@ if __name__ == "__main__":
 	connGroup.add_option("-s", "--hostname", dest="hostname", metavar="HOSTNAME", default="", help="defines the device hostname")
 	
  	#-k / --use-kshell
-	connGroup.add_option("-u", "--use-kshell", dest="useKShell", default=False, action="store_true", help="use KShell instead of CGI (default: no)")
+	connGroup.add_option("-k", "--use-kshell", dest="useKShell", default=False, action="store_true", help="use KShell instead of CGI (default: no)")
 	
 	#-a / --authfile
 	connGroup.add_option("-a", "--authfile", dest="authfile", metavar="FILE", default="", help="defines an auth file to use instead of shell variables")
 	
 	#-p / --kshell-port
 	connGroup.add_option("-p", "--kshell-port", dest="kshellPort", metavar="PORT", default="1234", help="defines the KShell port (default: 1234)")
+	
+	#-u / --username
+	connGroup.add_option("-u", "--username", dest="username", metavar="USERNAME", default="", help="defines the username")
+	
+	#-w / --password
+	connGroup.add_option("-w", "--password", dest="password", metavar="PASSWORD", default="", help="defines the password")
 	
 	#-n / --ntp
 	checkGroup.add_option("-n", "--check-ntp", dest="checkNTP", action="store_true",  default=False, help="checks NTP synchronization state - requires KShell (default: no)")
@@ -120,9 +126,6 @@ if __name__ == "__main__":
 	parser.add_option_group(connGroup)
 	parser.add_option_group(hashGroup)
 	parser.add_option_group(checkGroup)
-	
-	#TODO: other group?
-	
 	
 	#parse arguments
 	(options, args) = parser.parse_args()
@@ -176,6 +179,10 @@ if __name__ == "__main__":
 		if options.debug: print "DEBUG: checking shell variables"
 		s_username = os.environ["NETIO_LOGIN"]
 		s_password = os.environ["NETIO_PASSWORD"]
+	elif options.username != "" and options.password != "":
+		#parameters
+		s_username = options.username
+		s_password = options.password
 	else:
 		#prompt user
 		if options.debug: print "DEBUG: prompting for login credentials"
