@@ -18,7 +18,9 @@ You need to specify the following parameters:
 | `-s` / `--hostname` | defines the device hostname |
 | `-u` / `--use-kshell` | use KShell instead of CGI (*default: no*) |
 | `-a` / `--authfile` | defines an auth file to use instead of shell variables |
-| `-p` / `--kshell-port` | defines the KShell port (*default: 1234*) |
+| `-k` / `--kshell-port` | defines the KShell port (*default: 1234*) |
+| `-u` / `--username` | defines the username |
+| `-w` / `--password` | defines the password |
 | `-y` / `--use-hash` | uses password hash instead of plain password (*default: no*) |
 | `-g` / `--generate-hash` | generates a password hash and quits (*default: no*) |
 | `-n` / `--check-ntp` | checks NTP synchronization state - requires KShell (*default: no*) |
