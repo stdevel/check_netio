@@ -76,6 +76,8 @@ See the table below for tested firmware versions:
 | **230C** | [4.05](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=2110) | *not tested* |
 | **230CS** | [4.03](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=1987) | *not tested* |
 | **230CS** | [4.05](http://www.koukaam.se/kkmd/downloads.php?cat_id=6&download_id=2111) | *not tested* |
+| **NETIO4** | 4.x | *not tested* |
+| **NETIO4-All** | 4.x | *not tested* |
 
 Please let me know if you have tested the plugin on previously untested devices to complete the list!
 
