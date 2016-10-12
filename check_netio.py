@@ -1,13 +1,14 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # check_netio.py - a script for checking Koukaan NETIO devices
 #
-# 2015 By Christian Stankowic
+# 2016 By Christian Stankowic
 # <info at stankowic hyphen development dot net>
 # https://github.com/stdevel
 #
 
-from optparse import OptionParser
-from optparse import OptionGroup
+from optparse import OptionParser, OptionGroup
 import os
 import stat
 import getpass
@@ -21,54 +22,56 @@ import traceback
 
 #global variables
 synchronized = False
-loginError = False
+login_error = False
 hash = ""
 
 
 
-def getTGIResult(command):
+def get_tgi_result(command):
 #get result of TGI request
+	
 	#setup headers and URL
 	myHeaders = {'User-Agent': 'check_netio plugin (https://github.com/stdevel/check_netio)'}
 	#TODO: hashing URL?
-	if options.debug: print "Accessing: '" + NETIO_URL + "?login=p:" + s_username + ":xxx&" + command + "'"
+	if options.debug: print "Accessing: '{0}?login=p:{1}:xxx&{2}'".format(NETIO_URL, s_username, command)
 	try:
 		r = requests.get(NETIO_URL + "?login=p:" + s_username + ":" + s_password + "&" + command, headers=myHeaders)
 		#remove crap
 		return r.content.replace("<html>", "").replace("</html>", "").replace(" ", "")
 	except:
-		print "CRITICAL: unable to check device with hostname '" + options.hostname + "' - please check values!"
+		print "CRITICAL: unable to check device with hostname '{0}' - please check values!".format(options.hostname)
 		exit(2)
 
 
 
-def getKShellResult(command):
+def get_kshell_result(command):
 #get result of KShell request
-	global loginError
+	
+	global login_error
 	global hash
-	if options.debug: print "DEBUG: Checking NTP sync state"
-	#open telnet session
+	if options.debug: print "DEBUG: Executing KShell command '{0}'".format(command)
 	try:
-		tn = telnetlib.Telnet(options.hostname, options.kshellPort)
+		#open telnet session
+		tn = telnetlib.Telnet(options.hostname, options.kshell_port)
 		hash = tn.read_until("\n").replace("\n", "").replace("\r", "").replace("100 HELLO ", "")[:8]
-		if options.debug: print "DEBUG: system hash is " + hash
+		if options.debug: print "DEBUG: system hash is '{0}'".format(hash)
 		#login
 		if options.debug: print "DEBUG: logging in"
 		tn.write("login " + s_username + " " + s_password + "\n")
 		result = tn.read_until("\n").replace("\n", "")
-		if options.debug: print "DEBUG: login result: " + result
+		if options.debug: print "DEBUG: login result: {0}".format(result)
 		if "250 OK" not in result:
-			loginError = True
-			if options.debug: print "DEBUG: unable to login with credentials '" + s_username + ":xxx'"
+			login_error = True
+			if options.debug: print "DEBUG: unable to login with credentials '{0}:xxx'".format(s_username)
 		#get command state
 		tn.write(command + "\n")
 		result = tn.read_until("\n").replace("\n", "").replace("\r", "")[4:]
-		if options.debug: print "DEBUG: command result: '" + result + "'"
+		if options.debug: print "DEBUG: command result: '{0}'".format(result)
 		#return result
 		if len(result) > 0: return result
 		else: return False
 	except:
-		print "CRITICAL: unable to login to KShell on '" + options.hostname + ":" + options.kshellPort + "'"
+		print "CRITICAL: unable to login to KShell on '{0}:{1}'".format(options.hostname, options.kshell_port)
 		exit(2)
 
 
@@ -82,7 +85,7 @@ if __name__ == "__main__":
 	If you're not defining variables or an authfile you will be prompted to enter your login information.
 	Checkout the GitHub page for updates: https://github.com/stdevel/check_netio'''
 	
-	parser = OptionParser(description=desc,version="%prog version 0.2")
+	parser = OptionParser(description=desc,version="%prog version 0.3")
 	
  	#-d / --debug
 	parser.add_option("-d", "--debug", dest="debug", default=False, action="store_true", help="enable debugging outputs (default: no)")
@@ -96,13 +99,13 @@ if __name__ == "__main__":
 	connGroup.add_option("-s", "--hostname", dest="hostname", metavar="HOSTNAME", default="", help="defines the device hostname")
 	
  	#-k / --use-kshell
-	connGroup.add_option("-k", "--use-kshell", dest="useKShell", default=False, action="store_true", help="use KShell instead of CGI (default: no)")
+	connGroup.add_option("-k", "--use-kshell", dest="use_kshell", default=False, action="store_true", help="use KShell instead of CGI (default: no)")
 	
 	#-a / --authfile
 	connGroup.add_option("-a", "--authfile", dest="authfile", metavar="FILE", default="", help="defines an auth file to use instead of shell variables")
 	
 	#-p / --kshell-port
-	connGroup.add_option("-p", "--kshell-port", dest="kshellPort", metavar="PORT", default="1234", help="defines the KShell port (default: 1234)")
+	connGroup.add_option("-p", "--kshell-port", dest="kshell_port", metavar="PORT", default="1234", help="defines the KShell port (default: 1234)")
 	
 	#-u / --username
 	connGroup.add_option("-u", "--username", dest="username", metavar="USERNAME", default="", help="defines the username")
@@ -111,16 +114,19 @@ if __name__ == "__main__":
 	connGroup.add_option("-w", "--password", dest="password", metavar="PASSWORD", default="", help="defines the password")
 	
 	#-n / --ntp
-	checkGroup.add_option("-n", "--check-ntp", dest="checkNTP", action="store_true",  default=False, help="checks NTP synchronization state - requires KShell (default: no)")
+	checkGroup.add_option("-n", "--check-ntp", dest="check_ntp", action="store_true",  default=False, help="checks NTP synchronization state - requires KShell (default: no)")
 	
 	#-x / --port-state
-	checkGroup.add_option("-x", "--port-state", dest="portStates", metavar="STATE", help="defines expected port states [0=off, 1=on, ?=whatever]")
+	checkGroup.add_option("-x", "--port-state", dest="port_states", metavar="STATE", help="defines expected port states [0=off, 1=on, ?=whatever]")
+	
+	#-P / --enable-perfdata
+	checkGroup.add_option("-P", "--enable-perfdata", dest="show_perfdata", default=False, action="store_true", help="enables performance data (default: no)")
 	
 	#-y / --use-hash
-	hashGroup.add_option("-y", "--use-hash", dest="useHash", action="store_true", default=False, help="uses password hash instead of plain password (default: no)")
+	hashGroup.add_option("-y", "--use-hash", dest="use_hash", action="store_true", default=False, help="uses password hash instead of plain password (default: no)")
 	
 	#-g / --generate-hash
-	hashGroup.add_option("-g", "--generate-hash", dest="generateHash", action="store_true", default=False, help="generates a password hash and quits (default: no)")
+	hashGroup.add_option("-g", "--generate-hash", dest="generate_hash", action="store_true", default=False, help="generates a password hash and quits (default: no)")
 	
 	#add groups
 	parser.add_option_group(connGroup)
@@ -137,7 +143,7 @@ if __name__ == "__main__":
 	if options.debug: print "OPTIONS: {0}".format(options)
 	if options.debug: print "ARGUMENTS: {0}".format(args)
 	
-	if options.useHash:
+	if options.use_hash:
 		print "CRITICAL - using hash logins is currently unsupported. Check out https://github.com/stdevel/check_netio for more information!"
 		exit(2)
 	
@@ -145,15 +151,15 @@ if __name__ == "__main__":
 	if options.hostname == "":
 		print "CRITICAL - no hostname given"
 		exit(3)
-	if options.checkNTP == False and options.portStates == None and options.generateHash == False:
+	if options.check_ntp == False and options.port_states == None and options.generate_hash == False:
 		print "CRITICAL - no valid checks defined"
 		exit(3)
-	if options.portStates:
+	if options.port_states:
 		valid=True
-		for char in options.portStates:
+		for char in options.port_states:
 			if char not in ["0","1","?"]: valid=False
 		if valid == False:
-			print "CRITICAL - invalid port state expection defined ('" + options.portStates + "')"
+			print "CRITICAL - invalid port state expection defined ('" + options.port_states + "')"
 			exit(2)
 	
 	#get login credentials
@@ -187,12 +193,12 @@ if __name__ == "__main__":
 		#prompt user
 		if options.debug: print "DEBUG: prompting for login credentials"
 		s_username = raw_input("Username: ")
-		if options.useHash: s_password = getpass.getpass("Password hash: ")
+		if options.use_hash: s_password = getpass.getpass("Password hash: ")
 		else: s_password = getpass.getpass("Password: ")
 	
 	#generate hash
-	if options.generateHash:
-		hashsec = getKShellResult("version").lower()
+	if options.generate_hash:
+		hashsec = get_kshell_result("version").lower()
 		print "NETIO hash is: " + hashsec
 		print "Still need to do stuff here..."
 		exit(0)
@@ -202,13 +208,13 @@ if __name__ == "__main__":
 	
 	#read ports
 	try:
-		if len(options.portStates) > 0:
-			if options.useKShell:
+		if len(options.port_states) > 0:
+			if options.use_kshell:
 				#use KShell
-				result = getKShellResult("port list").lower()
+				result = get_kshell_result("port list").lower()
 			else:
 				#use TGI
-				result = getTGIResult("port=list")
+				result = get_tgi_result("port=list")
 			
 			#add ports if valid response
 			if len(result) == 4:
@@ -222,24 +228,23 @@ if __name__ == "__main__":
 				exit(3)
 			
 			#check ports
-			portsExpected = list(options.portStates)
-			if options.debug: print "DEBUG: portStates - portsExpected: " + str(ports) + " ==> " + str(portsExpected)
+			portsExpected = list(options.port_states)
+			if options.debug: print "DEBUG: port_states - portsExpected: " + str(ports) + " ==> " + str(portsExpected)
 	except:
 		#reading ports not requested
 		if options.debug: print "DEBUG: reading ports not requested"
 	
 	#check NTP state
-	if options.checkNTP:
-		if "synchronized" not in getKShellResult("system sntp").lower(): synchronized = False
+	if options.check_ntp:
+		if "synchronized" not in get_kshell_result("system sntp").lower(): synchronized = False
 		else: synchronized = True
 	
 	#return result
-	STRING=""
-	CODE=0
+	result_string=""
+	result_code=0
 	try:
-		if len(options.portStates) == 4:
+		if len(options.port_states) == 4:
 			#calculate diff
-			#portsDiff = []
 			portsDiff = list()
 			for i in range(0,len(ports)):
 				if ports[i] != portsExpected[i] and portsExpected[i] != "?": portsDiff.append(i)
@@ -251,35 +256,43 @@ if __name__ == "__main__":
 				for i in range(0,len(portsDiff)): portsDiff[i] = str(portsDiff[i]+1)
 				hrPortsDiff = ",".join(portsDiff)
 				#output diff
-				if len(hrPortsDiff) > 1: STRING="port differences detected: " + hrPortsDiff
-				else: STRING="port difference detected: " + hrPortsDiff
-				CODE=1
+				if len(hrPortsDiff) > 1: result_string="port differences detected: " + hrPortsDiff
+				else: result_string="port difference detected: " + hrPortsDiff
+				result_code=1
 			else:
-				STRING="ports (" + "".join(ports) + ") matching expectations (" + "".join(portsExpected) + ")"
+				result_string="ports (" + "".join(ports) + ") matching expectations (" + "".join(portsExpected) + ")"
 			
-			if options.checkNTP:
+			if options.check_ntp:
 				#check NTP
-				if synchronized: STRING = STRING + " - NTP synchronized"
+				if synchronized: result_string = result_string + " - NTP synchronized"
 				else:
-					STRING = STRING + " - NTP NOT synchronized"
-					CODE=2
+					result_string = result_string + " - NTP NOT synchronized"
+					result_code=2
+			
+			#add performance data
+			if options.show_perfdata:
+				perfdata="| "
+				#append ports data
+				for x, y in enumerate(ports): perfdata = "{0}'port{1}_state'={2} ".format(perfdata, x+1, y)
+				if options.debug:  print "DEBUG: Perfdata is: {0}".format(perfdata)
 	except:
 		if options.debug: traceback.print_exc(file=sys.stdout)
 		#check NTP only
 		if synchronized:
-			STRING="NTP state is synchronized"
-			CODE=0
+			result_string="NTP state is synchronized"
+			result_code=0
 		else:
-			STRING="NTP is NOT synchronized"
-			CODE=2
+			result_string="NTP is NOT synchronized"
+			result_code=2
 	#invalid login?
-	if loginError:
-		STRING="Unable to login with given credentials"
-		CODE=2
+	if login_error:
+		result_string="Unable to login with given credentials"
+		result_code=2
 	
 	#print result and exit
-	if CODE == 0: print "OK - " + STRING
-	elif CODE == 1: print "WARNING - " + STRING
-	elif CODE == 2: print "CRITICAL - " + STRING
-	else: print "UNKNOWN - " + STRING
-	exit(CODE)
+	if options.show_perfdata: result_string = "{0} {1}".format(result_string, perfdata)
+	if result_code == 0: print "OK - {0}".format(result_string)
+	elif result_code == 1: print "WARNING - {0}".format(result_string)
+	elif result_code == 2: print "CRITICAL - {0}".format(result_string)
+	else: print "UNKNOWN - {0}".format(result_string)
+	exit(result_code)
